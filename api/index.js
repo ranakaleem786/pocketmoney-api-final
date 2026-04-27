@@ -14,7 +14,7 @@ const app = express();
 
 
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: "https://pocketmoney.egrif.online",
   credentials: true,
 }));
 app.use(cookieParser());
