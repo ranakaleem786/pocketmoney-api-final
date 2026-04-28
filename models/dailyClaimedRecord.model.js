@@ -15,8 +15,17 @@ const dailyClaimedRecordSchema = new mongoose.Schema({
     type: String,
     required: [true, "binance NickName is Required"],
   },
-  
-},{timestamps:true});
+  redCode: {
+    type: String,
+    required: [true, "RedCode is Required"],
+  },
+  device: {
+    type: String,
+    required: [true, "Device Name is Required"],
+  },
+
+
+}, { timestamps: true });
 
 dailyClaimedRecordSchema.index(
   { user: 1, bountyId: 1 },

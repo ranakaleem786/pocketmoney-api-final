@@ -221,6 +221,8 @@ export const dailyClaimedRecord = async (req, res) => {
     const claimedRecord = await dailyClaimedRecordModel.create({
       user: user._id,
       bountyId: dailyBounty._id,
+      redCode: dailyBounty.redCode,
+      device: dailyBounty.device,
       binanceNickName: user.binanceNickName,
     });
 

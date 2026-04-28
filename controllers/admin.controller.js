@@ -110,7 +110,7 @@ export const createBounty = async (req, res) => {
   try {
     const userId = req.user?.id;
     const role = req.user?.role
-    const { redCode, dailyBountyLink } = req.body;
+    const { redCode, dailyBountyLink, device } = req.body;
 
     // 🔐 Allow: admin
     if (role !== "admin") {
@@ -131,7 +131,8 @@ export const createBounty = async (req, res) => {
       user:userId,
       expireAt,
       redCode,
-      dailyBountyLink
+      dailyBountyLink,
+      device
       // expireAt automatically set hoga (Date.now + 24h TTL)
     });
 

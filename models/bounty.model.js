@@ -14,7 +14,7 @@ const bountySchema = new mongoose.Schema({
     type: String,
     default: ""
   },
-  amout:{
+  device:{
     type:String
   },
   expireAt: {
