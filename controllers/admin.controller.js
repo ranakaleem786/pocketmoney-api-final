@@ -572,6 +572,73 @@ export const getAllWithdrawals = async (req, res) => {
 
 
 // csv upload to cloudinary
+// export const exportCSVToCloudinary = async (req, res) => {
+//   try {
+//     const data = await dailyClaimedRecordModel.find().lean();
+
+//     if (!data.length) {
+//       return responseHandler(res, 404, [], "No data found", false);
+//     }
+
+//     // ✅ Clean data (important)
+//     const cleanData = data.map(item => ({
+//       user: item.user,
+//       bountyId: item.bountyId,
+//       binanceNickName: item.binanceNickName,
+//       createdAt: item.createdAt,
+//     }));
+
+//     // 📊 Convert JSON → CSV
+//     const parser = new Parser();
+//     const csv = parser.parse(cleanData);
+
+//     const dir = path.join(process.cwd(), "exports");
+
+//     if (!fs.existsSync(dir)) {
+//       fs.mkdirSync(dir);
+//     }
+
+//     // 📁 Temp file path
+//     const fileName = `claimed-${Date.now()}.csv`;
+//     const filePath = path.join(dir, fileName);
+  
+
+//     // 💾 Save CSV locally
+//     fs.writeFileSync(filePath, csv);
+
+//     // ☁️ Upload to Cloudinary
+//     const upload = await cloudinary.uploader.upload(filePath, {
+//       resource_type: "raw", // 🔥 important for CSV
+//       folder: "pokect-money/claimed",
+//     });
+
+//     // 🗑️ Delete local file after upload
+//     fs.unlinkSync(filePath);
+
+//     return responseHandler(
+//       res,
+//       200,
+//       {
+//         url: upload.secure_url,
+//         public_id: upload.public_id,
+//       },
+//       "CSV exported & uploaded successfully"
+//     );
+
+//   } catch (error) {
+//     return responseHandler(
+//       res,
+//       500,
+//       {},
+//       `Export error ${error.message}`,
+//       false
+//     );
+//   }
+// };
+
+
+
+
 export const exportCSVToCloudinary = async (req, res) => {
   try {
     const data = await dailyClaimedRecordModel.find().lean();
@@ -580,39 +647,33 @@ export const exportCSVToCloudinary = async (req, res) => {
       return responseHandler(res, 404, [], "No data found", false);
     }
 
-    // ✅ Clean data (important)
-    const cleanData = data.map(item => ({
+    // ✅ Clean data
+    const cleanData = data.map((item) => ({
       user: item.user,
       bountyId: item.bountyId,
       binanceNickName: item.binanceNickName,
       createdAt: item.createdAt,
     }));
 
-    // 📊 Convert JSON → CSV
     const parser = new Parser();
     const csv = parser.parse(cleanData);
 
-    const dir = path.join(process.cwd(), "exports");
+    // 🔥 FIX: Vercel-safe temp directory
+    const dir = "/tmp";
 
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-    }
-
-    // 📁 Temp file path
     const fileName = `claimed-${Date.now()}.csv`;
     const filePath = path.join(dir, fileName);
-  
 
-    // 💾 Save CSV locally
+    // 💾 write in temp (NOT project folder)
     fs.writeFileSync(filePath, csv);
 
-    // ☁️ Upload to Cloudinary
+    // ☁️ upload to cloudinary
     const upload = await cloudinary.uploader.upload(filePath, {
-      resource_type: "raw", // 🔥 important for CSV
-      folder: "pokect-money/claimed",
+      resource_type: "raw",
+      folder: "pocket-money/claimed",
     });
 
-    // 🗑️ Delete local file after upload
+    // 🗑️ cleanup temp file
     fs.unlinkSync(filePath);
 
     return responseHandler(
