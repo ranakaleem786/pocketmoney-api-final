@@ -2,6 +2,7 @@ import { userModel } from "../models/user.model.js";
 import { responseHandler } from "../utils/responseHandler.js";
 import { bountyModel } from '../models/bounty.model.js';
 import { mBountyModel } from "../models/mBounty.model.js";
+import { paymentMethodModel } from '../models/paymentMethod.model.js'
 import { dailyClaimedRecordModel } from "../models/dailyClaimedRecord.model.js";
 import { sendEmail } from '../service/sendEmail.service.js'
 import cloudinary from "../config/cloudinary.js";
