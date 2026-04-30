@@ -13,6 +13,7 @@ router.delete('/delete-user/:id', auth, adminController.deleteUser);
 
 // bounty
 router.post("/create-bounty", auth, adminController.createBounty);
+router.put("/update-bounty/:bountyId", auth, adminController.updateBounty);
 router.get("/getalluserbountesonly", auth, adminController.getAllUserBountesOnly);
 router.get("/get-all-admin-bounties-only", auth, adminController.getAllAdminBountesOnly);
 router.get("/getalladminbountesonly", auth, adminController.getAllAdminBountesOnly);

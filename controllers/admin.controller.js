@@ -143,6 +143,49 @@ export const createBounty = async (req, res) => {
   }
 };
 
+export const updateBounty = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    const role = req.user?.role;
+
+    const { bountyId } = req.params;
+    const { redCode, dailyBountyLink, device, extendDays } = req.body;
+
+    // 🔐 Only admin allowed
+    if (role !== "admin") {
+      return responseHandler(res, 403, {}, "Access denied", false);
+    }
+
+    // 🔍 Find bounty
+    const bounty = await bountyModel.findById(bountyId);
+
+    if (!bounty) {
+      return responseHandler(res, 404, {}, "Bounty not found", false);
+    }
+
+    // ✏️ Update only provided fields
+    if (redCode !== undefined) bounty.redCode = redCode;
+    if (dailyBountyLink !== undefined) bounty.dailyBountyLink = dailyBountyLink;
+    if (device !== undefined) bounty.device = device;
+
+    // ⏳ Expire update logic
+    if (extendDays !== undefined) {
+      // agar custom date bheji hai
+      bounty.expireAt = new Date(
+        bounty.expireAt.getTime() +
+        extendDays * 24 * 60 * 60 * 1000
+      );
+    }
+
+    await bounty.save();
+
+    return responseHandler(res, 200, bounty, "Bounty updated successfully");
+
+  } catch (error) {
+    return responseHandler(res, 500, {}, error.message, false);
+  }
+};
+
 export const getAllUserBountesOnly = async (req, res) => {
   try {
     const role = req.user?.role;
