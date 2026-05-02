@@ -224,7 +224,6 @@ export const getAllUserBountesOnly = async (req, res) => {
   }
 };
 
-
 export const getAllAdminBountesOnly = async (req, res) => {
   try {
     const role = req.user?.role;
